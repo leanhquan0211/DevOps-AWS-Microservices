@@ -124,9 +124,19 @@ Danh sách đầy đủ nằm trong [docs/lab02-part1/evidence-checklist.md](/n:
 
 ## 5. Cấu hình GitHub Actions
 
-Workflow CI dùng các biến sau trên GitHub:
+Workflow `.github/workflows/terraform-cicd.yml` dùng các biến sau trên GitHub:
 
 - Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `ALLOWED_SSH_CIDR_1`, `ALLOWED_SSH_CIDR_2`
 - Repository variables: `KEY_NAME`
 
-Workflow sẽ tạo file `terraform.auto.tfvars` tạm thời trong lúc chạy `terraform plan`, không cần commit file này vào repo. Workflow chỉ kiểm tra và quét bảo mật, không tự động `terraform apply`.
+Workflow được chia thành 2 job:
+
+- `terraform-ci`: checkout source, setup Terraform, cấu hình AWS credentials, tạo `terraform.auto.tfvars`, chạy `terraform fmt -check -recursive`, `terraform init -input=false`, `terraform validate`, `terraform plan -input=false -no-color` và Checkov.
+- `terraform-cd`: chỉ chạy sau khi `terraform-ci` thành công và chỉ áp dụng cho `push` vào `main`; job này thực hiện `terraform init -input=false` và `terraform apply -auto-approve -input=false`.
+
+Hành vi theo từng sự kiện:
+
+- Pull request vào `main` chỉ chạy kiểm tra CI, không triển khai hạ tầng.
+- Push vào `main` sẽ chạy CI trước, CI pass mới chạy CD để triển khai tự động.
+
+Workflow sẽ tạo file `terraform.auto.tfvars` tạm thời trong lúc chạy, không cần commit file này vào repo.
