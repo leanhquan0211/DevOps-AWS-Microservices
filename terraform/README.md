@@ -126,8 +126,7 @@ Danh sách đầy đủ nằm trong [docs/lab02-part1/evidence-checklist.md](/n:
 
 Workflow `.github/workflows/terraform-cicd.yml` dùng các biến sau trên GitHub:
 
-- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `ALLOWED_SSH_CIDR_1`, `ALLOWED_SSH_CIDR_2`
-- Repository variables: `KEY_NAME`
+- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `TF_VAR_key_name`, `TF_VAR_allowed_ssh_cidrs`
 
 Workflow được chia thành 2 job:
 
@@ -139,4 +138,4 @@ Hành vi theo từng sự kiện:
 - Pull request vào `main` chỉ chạy kiểm tra CI, không triển khai hạ tầng.
 - Push vào `main` sẽ chạy CI trước, CI pass mới chạy CD để triển khai tự động.
 
-Workflow sẽ tạo file `terraform.auto.tfvars` tạm thời trong lúc chạy, không cần commit file này vào repo.
+Workflow sẽ tạo file `terraform.auto.tfvars` tạm thời trong lúc chạy từ GitHub Secrets, không cần commit file này vào repo.
