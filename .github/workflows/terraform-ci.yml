@@ -1,0 +1,73 @@
+name: Terraform CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform-ci.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: Terraform Validate And Checkov
+    runs-on: ubuntu-latest
+
+    env:
+      TF_IN_AUTOMATION: "true"
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create temporary terraform.auto.tfvars
+        shell: bash
+        run: |
+          cat <<EOF > terraform.auto.tfvars
+          key_name = "${{ vars.KEY_NAME }}"
+          allowed_ssh_cidrs = ["${{ secrets.ALLOWED_SSH_CIDR_1 }}", "${{ secrets.ALLOWED_SSH_CIDR_2 }}"]
+          aws_region = "${{ secrets.AWS_REGION }}"
+          EOF
+
+      - name: Terraform format check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        run: terraform plan -input=false -no-color
+
+      - name: Run Checkov scan
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install checkov
+          checkov -d . --framework terraform --skip-download

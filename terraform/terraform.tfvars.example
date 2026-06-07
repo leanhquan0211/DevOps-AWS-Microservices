@@ -1,0 +1,11 @@
+aws_region         = "ap-southeast-1"
+project_name       = "nt548-lab02"
+vpc_cidr           = "10.20.0.0/16"
+public_subnet_cidr = "10.20.1.0/24"
+private_subnet_cidr = "10.20.2.0/24"
+allowed_ssh_cidrs = [
+  "14.187.93.155/32",
+  "113.161.73.175/32",
+]
+key_name           = "replace-with-your-keypair-name"
+instance_type      = "t3.micro"
