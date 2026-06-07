@@ -1,8 +1,3 @@
-parameters:
-  ProjectName: cloudformation-infra-test
-  KeyName: nt548-laq1254-key-v2
-  AllowedSshCidr: 0.0.0.0/0
-
 project:
   name: cloudformation-infra-test
   regions:
@@ -11,3 +6,7 @@ project:
 tests:
   infrastructure:
     template: templates/infrastructure.yaml
+    parameters:
+      ProjectName: cloudformation-infra-test
+      KeyName: nt548-laq1254-key-v2
+      AllowedSshCidr: 0.0.0.0/0

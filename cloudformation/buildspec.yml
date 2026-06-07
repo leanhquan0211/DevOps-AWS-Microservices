@@ -4,26 +4,30 @@ phases:
   install:
     commands:
       - python -m pip install --upgrade pip
-      - python -m pip uninstall -y setuptools
       - python -m pip install "setuptools<81"
       - python -m pip install cfn-lint
-      - python -m pip install taskcat
+      - python -m pip install "taskcat==0.9.58"
       - python -c "import pkg_resources; print('pkg_resources OK')"
+      - taskcat --version
 
   pre_build:
     commands:
       - aws --version
       - cfn-lint --version
+      - pwd
+      - ls -la
+      - ls -la cloudformation
+      - ls -la cloudformation/templates
 
   build:
     commands:
       - cfn-lint cloudformation/templates/infrastructure.yaml
       - cd cloudformation
       - pwd
-      - ls -la
       - cat .taskcat.yml
       - taskcat test run
 
 artifacts:
   files:
     - cloudformation/templates/infrastructure.yaml
+    - cloudformation/.taskcat.yml
