@@ -4,9 +4,11 @@ phases:
   install:
     commands:
       - python -m pip install --upgrade pip
-      - pip install setuptools
-      - pip install cfn-lint
-      - pip install taskcat
+      - python -m pip uninstall -y setuptools
+      - python -m pip install "setuptools<81"
+      - python -m pip install cfn-lint
+      - python -m pip install taskcat
+      - python -c "import pkg_resources; print('pkg_resources OK')"
   pre_build:
     commands:
       - aws --version
