@@ -14,9 +14,13 @@ phases:
       - aws --version
       - cfn-lint --version
   build:
-    commands:
-      - cfn-lint cloudformation/templates/infrastructure.yaml
-      - cd cloudformation && taskcat test run
+  commands:
+    - cfn-lint cloudformation/templates/infrastructure.yaml
+    - cd cloudformation
+    - pwd
+    - ls -la
+    - cat .taskcat.yml
+    - taskcat test run
 
 artifacts:
   files:
