@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - python -m pip install --upgrade pip
+      - pip install cfn-lint taskcat
+  pre_build:
+    commands:
+      - aws --version
+      - cfn-lint --version
+      - taskcat --version
+  build:
+    commands:
+      - cfn-lint cloudformation/templates/infrastructure.yaml
+      - cd cloudformation/taskcat && taskcat test run
+
+artifacts:
+  files:
+    - cloudformation/templates/infrastructure.yaml
