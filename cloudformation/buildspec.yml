@@ -16,7 +16,7 @@ phases:
   build:
     commands:
       - cfn-lint cloudformation/templates/infrastructure.yaml
-      - cd cloudformation/taskcat && taskcat test run
+      - cd cloudformation && taskcat test run
 
 artifacts:
   files:
