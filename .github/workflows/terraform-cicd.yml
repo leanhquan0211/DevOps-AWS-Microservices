@@ -38,6 +38,9 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Terraform format check
+        run: terraform fmt -check -recursive
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -53,9 +56,6 @@ jobs:
           allowed_ssh_cidrs = ["${{ secrets.ALLOWED_SSH_CIDR_1 }}", "${{ secrets.ALLOWED_SSH_CIDR_2 }}"]
           aws_region = "${{ secrets.AWS_REGION }}"
           EOF
-
-      - name: Terraform format check
-        run: terraform fmt -check -recursive
 
       - name: Terraform init
         run: terraform init -input=false
