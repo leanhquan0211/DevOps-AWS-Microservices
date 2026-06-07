@@ -52,8 +52,8 @@ jobs:
         shell: bash
         run: |
           cat <<EOF > terraform.auto.tfvars
-          key_name = "${{ vars.KEY_NAME }}"
-          allowed_ssh_cidrs = ["${{ secrets.ALLOWED_SSH_CIDR_1 }}", "${{ secrets.ALLOWED_SSH_CIDR_2 }}"]
+          key_name = "${{ secrets.TF_VAR_KEY_NAME }}"
+          allowed_ssh_cidrs = ${{ secrets.TF_VAR_ALLOWED_SSH_CIDRS }}
           aws_region = "${{ secrets.AWS_REGION }}"
           EOF
 
@@ -76,7 +76,9 @@ jobs:
     name: Terraform CD
     runs-on: ubuntu-latest
     needs: terraform-ci
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      contains(github.event.head_commit.message, '[deploy-terraform]')
 
     env:
       TF_IN_AUTOMATION: "true"
@@ -105,8 +107,8 @@ jobs:
         shell: bash
         run: |
           cat <<EOF > terraform.auto.tfvars
-          key_name = "${{ vars.KEY_NAME }}"
-          allowed_ssh_cidrs = ["${{ secrets.ALLOWED_SSH_CIDR_1 }}", "${{ secrets.ALLOWED_SSH_CIDR_2 }}"]
+          key_name = "${{ secrets.TF_VAR_KEY_NAME }}"
+          allowed_ssh_cidrs = ${{ secrets.TF_VAR_ALLOWED_SSH_CIDRS }}
           aws_region = "${{ secrets.AWS_REGION }}"
           EOF
 

@@ -36,12 +36,11 @@ Quy tắc chạy workflow:
 
 GitHub Actions cần cấu hình:
 
-- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `ALLOWED_SSH_CIDR_1`, `ALLOWED_SSH_CIDR_2`
-- Repository variables: `KEY_NAME`
+- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `TF_VAR_KEY_NAME`, `TF_VAR_ALLOWED_SSH_CIDRS`
 
 Lưu ý quan trọng:
 
 - Không commit file `terraform.tfvars` lên repo.
-- Workflow tạo file `terraform.auto.tfvars` tạm thời từ GitHub Secrets/Variables để phục vụ `plan` và `apply`.
+- Workflow tạo file `terraform.auto.tfvars` tạm thời từ GitHub Secrets để phục vụ `plan` và `apply`.
 - NAT Gateway có thể phát sinh chi phí ngay cả khi lưu lượng thấp.
 - Sau khi demo xong, hãy chạy `terraform destroy` để tránh tốn chi phí không cần thiết.
