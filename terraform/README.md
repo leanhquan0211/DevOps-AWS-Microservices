@@ -126,7 +126,7 @@ Danh sách đầy đủ nằm trong [docs/lab02-part1/evidence-checklist.md](/n:
 
 Workflow `.github/workflows/terraform-cicd.yml` dùng các biến sau trên GitHub:
 
-- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `TF_VAR_key_name`, `TF_VAR_allowed_ssh_cidrs`
+- Secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `TF_VAR_KEY_NAME`, `TF_VAR_ALLOWED_SSH_CIDRS`
 
 Workflow được chia thành 2 job:
 
